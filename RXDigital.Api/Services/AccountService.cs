@@ -50,7 +50,7 @@ namespace RXDigital.Api.Services
                         var newDoctor = new Doctor
                         {
                             RegistrationId = accountDto.Registration,
-                            AccountId = account.Id
+                            UserId = account.Id
                         };
 
                         await _doctorRepository.AddAsync(newDoctor, cancellationToken);
@@ -90,7 +90,7 @@ namespace RXDigital.Api.Services
         }
 
         /// <inheritdoc />
-        public async Task<LoginResponseDto> LoginAsync(LoginRequestDto loginDto, CancellationToken cancellationToken)
+        public async Task<string> LoginAsync(LoginRequestDto loginDto, CancellationToken cancellationToken)
         {
             var user = await _accountRepository.FindByEmailAsync(loginDto.Email, cancellationToken);
 
@@ -103,17 +103,13 @@ namespace RXDigital.Api.Services
             // We need to update claims in the future.
             var authClaims = new List<Claim>()
             {
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim("RoleId", user.RoleId.ToString()),
+                new Claim("UserId", user.Id.ToString()),
             };
 
             var jwt = CreateToken(authClaims);
 
-            return new LoginResponseDto
-            {
-                Token = jwt,
-                Role = user.RoleId
-            };
+            return jwt;
         }
 
         private string CreateToken(List<Claim> claims)

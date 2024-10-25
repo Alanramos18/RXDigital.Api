@@ -14,12 +14,12 @@ namespace RXDigital.Api.Entities.Mappings
                 .HasColumnName("matricula")
                 .IsRequired();
 
-            builder.Property(t => t.AccountId)
+            builder.Property(t => t.UserId)
                 .HasColumnName("id_usuario");
 
-            builder.HasOne(t => t.Account)
+            builder.HasOne(t => t.User)
                 .WithOne(t => t.Doctor)
-                .HasForeignKey<Doctor>(t => t.AccountId)
+                .HasForeignKey<Doctor>(t => t.UserId)
                 .IsRequired();
         }
     }

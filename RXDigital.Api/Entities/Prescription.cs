@@ -3,7 +3,6 @@
     public class Prescription
     {
         public int PrescriptionId { get; set; }
-        public int? Amount { get; set; }
         public string? Diagnostic { get; set; }
         public string? Indications { get; set; }
         public DateTime Expiration { get; set; }

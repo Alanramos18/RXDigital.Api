@@ -12,9 +12,17 @@ namespace RXDigital.Api.Helpers
 
             var patientInfo = new PatientInfoResponseDto
             {
-                Id = entity.PatientId,
+                PatientId = entity.PatientId,
                 FirstName = entity.FirstName,
-                LastName = entity.LastName
+                LastName = entity.LastName,
+                BirthDay = entity.BirthDay,
+                SocialNumber = entity.SocialNumber,
+                Gender = entity.Gender,
+                Nationality = entity.Nationality,
+                Cellphone = entity.Cellphone,
+                HomePhone = entity.HomePhone,
+                SocialWorkName = entity.SocialWork.Name,
+                SocialPlan = entity.SocialWork.SocialPlan
             };
 
             return patientInfo;

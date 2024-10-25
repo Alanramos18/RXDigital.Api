@@ -18,6 +18,6 @@ namespace RXDigital.Api.Services.Interfaces
         /// <param name="dto">Login dto</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>JWT string</returns>
-        Task<LoginResponseDto> LoginAsync(LoginRequestDto dto, CancellationToken cancellationToken);
+        Task<string> LoginAsync(LoginRequestDto dto, CancellationToken cancellationToken);
     }
 }

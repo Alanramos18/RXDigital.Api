@@ -53,7 +53,7 @@ namespace RXDigital.Api.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LoginResponseDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> LoginAsync([FromBody] LoginRequestDto dto, CancellationToken cancellationToken = default)
         {

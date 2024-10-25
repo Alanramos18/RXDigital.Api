@@ -7,19 +7,27 @@ namespace RXDigital.Api.Entities.Mappings
     {
         public void Configure(EntityTypeBuilder<Medicine> builder)
         {
-            builder.ToTable("medicina", "admin");
+            builder.ToTable("medicamento", "admin");
             builder.HasKey(t => t.MedicineId);
 
             builder.Property(t => t.MedicineId)
                 .HasColumnName("id_medicamento")
                 .IsRequired();
 
-            builder.Property(t => t.Name)
+            builder.Property(t => t.CommercialName)
                 .HasColumnName("nombre_comercial")
                 .IsRequired();
 
             builder.Property(t => t.Description)
                 .HasColumnName("descripcion")
+                .IsRequired();
+
+            builder.Property(t => t.Presentation)
+                .HasColumnName("presentacion")
+                .IsRequired();
+
+            builder.Property(t => t.Concentration)
+                .HasColumnName("concentracion")
                 .IsRequired();
         }
     }

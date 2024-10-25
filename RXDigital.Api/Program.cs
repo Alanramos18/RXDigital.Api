@@ -38,10 +38,14 @@ builder.Services.Configure<IdentityOptions>(x => {
 
 builder.Services.AddTransient<IAccountRepository, AccountRepository>();
 builder.Services.AddTransient<IDoctorRepository, DoctorRepository>();
+builder.Services.AddTransient<IPrescriptionRepository, PrescriptionRepository>();
+builder.Services.AddTransient<IMedicineRepository, MedicineRepository>();
+builder.Services.AddTransient<ISocialWorkRepository, SocialWorkRepository>();
 builder.Services.AddTransient<IPharmaceuticalRepository, PharmaceuticalRepository>();
 builder.Services.AddTransient<IPatientRepository, PatientRepository>();
 builder.Services.AddTransient<IAccountService, AccountService>();
 builder.Services.AddTransient<IPatientService, PatientService>();
+builder.Services.AddTransient<IDoctorService, DoctorService>();
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JWT"));
 

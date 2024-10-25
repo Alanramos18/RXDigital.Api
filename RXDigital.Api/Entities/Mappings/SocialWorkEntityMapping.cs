@@ -17,6 +17,10 @@ namespace RXDigital.Api.Entities.Mappings
             builder.Property(t => t.SocialPlan)
                 .HasColumnName("plan_social")
                 .IsRequired();
+
+            builder.Property(t => t.Name)
+                .HasColumnName("nombre")
+                .IsRequired();
         }
     }
 }

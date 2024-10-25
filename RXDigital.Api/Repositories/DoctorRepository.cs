@@ -1,4 +1,6 @@
-﻿using RXDigital.Api.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using RXDigital.Api.Context;
+using RXDigital.Api.DTOs;
 using RXDigital.Api.Entities;
 using RXDigital.Api.Repositories.Interfaces;
 

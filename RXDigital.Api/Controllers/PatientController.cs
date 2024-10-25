@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RXDigital.Api.DTOs;
+using RXDigital.Api.Entities;
 using RXDigital.Api.Repositories;
 using RXDigital.Api.Services.Interfaces;
 
@@ -42,6 +43,53 @@ namespace RXDigital.Api.Controllers
                 {
 
                     return new BadRequestObjectResult("That patient doesn't exist.");
+                }
+
+                return new OkObjectResult(response);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(int))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreatePatientAsync(PatientResquestDto patientResquestDto, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var response = await _patientService.CreatePatientAsync(patientResquestDto, cancellationToken);
+
+                if (response == 0)
+                {
+
+                    return new BadRequestObjectResult("Something went wrong.");
+                }
+
+                return new OkObjectResult(response);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("getSocialWorks")]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(List<SocialWorksInfoResponseDto>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetSocialWorks(CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var response = await _patientService.GetSocialWorksAsync(cancellationToken);
+
+                if (response == null)
+                {
+
+                    return new BadRequestObjectResult("There are no social works");
                 }
 
                 return new OkObjectResult(response);

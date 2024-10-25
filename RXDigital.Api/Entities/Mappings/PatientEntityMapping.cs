@@ -33,7 +33,19 @@ namespace RXDigital.Api.Entities.Mappings
             builder.Property(t => t.SocialWorkId)
                 .HasColumnName("id_obra_social");
 
-            builder.HasOne(t => t.SocialWork)
+            builder.Property(t => t.Gender)
+                .HasColumnName("sexo");
+
+            builder.Property(t => t.Nationality)
+                .HasColumnName("nacionalidad");
+
+            builder.Property(t => t.Cellphone)
+                .HasColumnName("celular");
+
+            builder.Property(t => t.HomePhone)
+                .HasColumnName("telefono_fijo");
+
+        builder.HasOne(t => t.SocialWork)
                 .WithMany(t => t.Patients)
                 .HasForeignKey(t => t.SocialWorkId)
                 .IsRequired();
