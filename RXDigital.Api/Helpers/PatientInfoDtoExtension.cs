@@ -16,13 +16,17 @@ namespace RXDigital.Api.Helpers
                 FirstName = entity.FirstName,
                 LastName = entity.LastName,
                 BirthDay = entity.BirthDay,
+                InscriptionDate = entity.InscriptionDate,
                 SocialNumber = entity.SocialNumber,
                 Gender = entity.Gender,
-                Nationality = entity.Nationality,
                 Cellphone = entity.Cellphone,
                 HomePhone = entity.HomePhone,
                 SocialWorkName = entity.SocialWork.Name,
-                SocialPlan = entity.SocialWork.SocialPlan
+                SocialPlan = entity.SocialWork.SocialPlan,
+                Address = $"{entity.AddressStreet} {entity.AddressNumber}",
+                Email = entity.Email,
+                Nationality = entity.Location.Country,
+                IsAvailable = entity.IsAvailable
             };
 
             return patientInfo;

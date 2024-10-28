@@ -20,6 +20,7 @@ namespace RXDigital.Api.Context
         public DbSet<Role> Roles { get; set; }
         public DbSet<SocialWork> SocialWorks { get; set; }
         public DbSet<Status> Statuses { get; set; }
+        public DbSet<Location> Locations { get; set; }
         public DbSet<GetPrescriptionsProc> GetPrescriptionsProcs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -48,6 +49,7 @@ namespace RXDigital.Api.Context
             builder.ApplyConfiguration(new RoleEntityMapping());
             builder.ApplyConfiguration(new SocialWorkEntityMapping());
             builder.ApplyConfiguration(new StatusEntityMapping());
+            builder.ApplyConfiguration(new LocationEntityMapping());
         }
 
         //private static void SeedRoles(ModelBuilder builder)

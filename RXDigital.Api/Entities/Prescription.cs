@@ -5,6 +5,7 @@
         public int PrescriptionId { get; set; }
         public string? Diagnostic { get; set; }
         public string? Indications { get; set; }
+        public DateTime CreatedDate { get; set; }
         public DateTime Expiration { get; set; }
 
         public int RegistrationId { get; set; }

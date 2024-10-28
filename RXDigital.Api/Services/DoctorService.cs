@@ -76,13 +76,14 @@ namespace RXDigital.Api.Services
             {
                 var prescription = new Prescription
                 {
-                    PrescriptionId = 11,
+                    PrescriptionId = 12,
                     RegistrationId = requestDto.DoctorRegistration,
                     PatientId = requestDto.PatientId,
                     MedicineId = requestDto.MedicineId,
                     Diagnostic = requestDto.Diagnostic,
                     Indications = requestDto.Indications,
-                    Expiration = DateTime.UtcNow.AddDays(30),
+                    CreatedDate = DateTime.UtcNow,
+                    Expiration = DateTime.UtcNow.AddDays(90),
                     StatusId = (int)StatusEnum.Emitida
                 };
 

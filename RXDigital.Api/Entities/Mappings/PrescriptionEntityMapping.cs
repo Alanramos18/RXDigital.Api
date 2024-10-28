@@ -20,6 +20,10 @@ namespace RXDigital.Api.Entities.Mappings
             builder.Property(t => t.Indications)
                 .HasColumnName("indicaciones");
             
+            builder.Property(t => t.CreatedDate)
+                .HasColumnName("fecha_emision")
+                .IsRequired();
+
             builder.Property(t => t.Expiration)
                 .HasColumnName("expiracion")
                 .IsRequired();

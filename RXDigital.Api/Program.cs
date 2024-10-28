@@ -41,6 +41,7 @@ builder.Services.AddTransient<IDoctorRepository, DoctorRepository>();
 builder.Services.AddTransient<IPrescriptionRepository, PrescriptionRepository>();
 builder.Services.AddTransient<IMedicineRepository, MedicineRepository>();
 builder.Services.AddTransient<ISocialWorkRepository, SocialWorkRepository>();
+builder.Services.AddTransient<ILocationRepository, LocationRepository>();
 builder.Services.AddTransient<IPharmaceuticalRepository, PharmaceuticalRepository>();
 builder.Services.AddTransient<IPatientRepository, PatientRepository>();
 builder.Services.AddTransient<IAccountService, AccountService>();

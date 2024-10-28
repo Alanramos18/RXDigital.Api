@@ -26,6 +26,10 @@ namespace RXDigital.Api.Entities.Mappings
                 .HasColumnName("fecha_nacimiento")
                 .IsRequired();
 
+            builder.Property(t => t.InscriptionDate)
+                .HasColumnName("fecha_inscripcion")
+                .IsRequired();
+
             builder.Property(t => t.SocialNumber)
                 .HasColumnName("numero_afiliado")
                 .IsRequired();
@@ -36,18 +40,32 @@ namespace RXDigital.Api.Entities.Mappings
             builder.Property(t => t.Gender)
                 .HasColumnName("sexo");
 
-            builder.Property(t => t.Nationality)
-                .HasColumnName("nacionalidad");
-
             builder.Property(t => t.Cellphone)
                 .HasColumnName("celular");
 
             builder.Property(t => t.HomePhone)
                 .HasColumnName("telefono_fijo");
 
-        builder.HasOne(t => t.SocialWork)
+            builder.Property(t => t.IsAvailable)
+                .HasColumnName("habilitado");
+
+            builder.Property(t => t.AddressStreet)
+                .HasColumnName("calle");
+
+            builder.Property(t => t.AddressNumber)
+                .HasColumnName("numero");
+
+            builder.Property(t => t.LocationId)
+                .HasColumnName("id_localidad");
+
+            builder.HasOne(t => t.SocialWork)
                 .WithMany(t => t.Patients)
                 .HasForeignKey(t => t.SocialWorkId)
+                .IsRequired();
+
+            builder.HasOne(t => t.Location)
+                .WithMany(t => t.Patients)
+                .HasForeignKey(t => t.LocationId)
                 .IsRequired();
         }
     }

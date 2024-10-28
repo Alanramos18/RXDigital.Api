@@ -14,30 +14,51 @@ namespace RXDigital.Api.Services
     {
         private readonly IPatientRepository _patientRepository;
         private readonly ISocialWorkRepository _socialWorkRepository;
+        private readonly ILocationRepository _locationRepository;
         private readonly ILogger<AccountService> _logger;
 
-        public PatientService(IPatientRepository patientRepository, ISocialWorkRepository socialWorkRepository, ILogger<AccountService> logger)
+        public PatientService(IPatientRepository patientRepository, ISocialWorkRepository socialWorkRepository, ILocationRepository locationRepository, ILogger<AccountService> logger)
         {
             _patientRepository = patientRepository;
             _socialWorkRepository = socialWorkRepository;
+            _locationRepository = locationRepository;
             _logger = logger;
         }
 
         /// <inheritdoc />
         public async Task<PatientInfoResponseDto> GetBasicInformationAsync(int patientId, CancellationToken cancellationToken)
         {
-            var patient = await _patientRepository
-                .Get()
-                .Include(x => x.SocialWork)
-                .FirstOrDefaultAsync(x => x.PatientId == patientId, cancellationToken);
+            try
+            {
+                var patient = await _patientRepository
+                    .Get()
+                    .Include(x => x.SocialWork)
+                    .Include(x => x.Location)
+                    .FirstOrDefaultAsync(x => x.PatientId == patientId, cancellationToken);
 
-            var patientInfo = patient.Convert();
+                var patientInfo = patient.Convert();
 
-            return patientInfo;
+                return patientInfo;
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+
         }
 
         public async Task<int> CreatePatientAsync(PatientResquestDto patientResquestDto, CancellationToken cancellationToken)
         {
+            var location = new Location
+            {
+                Name = patientResquestDto.Location,
+                Province = patientResquestDto.Province,
+                Country = patientResquestDto.Country
+            };
+
+            await _locationRepository.AddAsync(location, cancellationToken);
+
             var patient = new Patient
             {
                 PatientId = patientResquestDto.Id,
@@ -45,14 +66,15 @@ namespace RXDigital.Api.Services
                 LastName = patientResquestDto.LastName,
                 BirthDay = patientResquestDto.BirthDay,
                 Gender = patientResquestDto.Gender,
-                Nationality = patientResquestDto.Nationality,
-                //Address = patientResquestDto.Address,
                 Cellphone = patientResquestDto.Cellphone,
                 HomePhone = patientResquestDto.HomePhone,
-                //Email = patientResquestDto.Email,
+                Email = patientResquestDto.Email,
                 SocialWorkId = patientResquestDto.SocialWorkId,
                 SocialNumber = patientResquestDto.SocialNumber,
-                //AvalabilityStatus = "Habilitado"
+                IsAvailable = true,
+                AddressStreet = patientResquestDto.AddressStreet,
+                AddressNumber = patientResquestDto.AddressNumber,
+                LocationId = location.LocationId
             };
 
             await _patientRepository.AddAsync(patient, cancellationToken);
