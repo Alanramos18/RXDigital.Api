@@ -8,11 +8,10 @@ namespace RXDigital.Api.Entities.Mappings
         public void Configure(EntityTypeBuilder<Prescription> builder)
         {
             builder.ToTable("receta", "admin");
-            builder.HasKey(t => t.PrescriptionId);
+            builder.HasKey(t => t.PrescriptionCode);
 
-            builder.Property(t => t.PrescriptionId)
-                .HasColumnName("id_receta")
-                .IsRequired();
+            builder.Property(t => t.PrescriptionCode)
+                .HasColumnName("codigo_receta");
 
             builder.Property(t => t.Diagnostic)
                 .HasColumnName("diagnostico");
@@ -41,8 +40,7 @@ namespace RXDigital.Api.Entities.Mappings
                 .IsRequired();
 
             builder.Property(t => t.PharmaceuticalRegistrationId)
-                .HasColumnName("matricula_farmaceutico")
-                .IsRequired();
+                .HasColumnName("matricula_farmaceutico");
 
             builder.Property(t => t.StatusId)
                 .HasColumnName("id_estado")

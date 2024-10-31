@@ -12,7 +12,10 @@ namespace RXDigital.Api.Context.Extensions
             if (configuration == null)
                 throw new ArgumentNullException(nameof(configuration));
 
-            services.AddDbContext<RxDigitalContext>(options => options.UseSqlServer(configuration.GetConnectionString("RXDigitalServiceConnection")));
+            services.AddDbContext<RxDigitalContext>(options => {
+                options.UseSqlServer(configuration.GetConnectionString("RXDigitalServiceConnection"));
+                options.EnableDetailedErrors(true);
+            });
             services.AddTransient<IRxDigitalContext, RxDigitalContext>(); ;
         }
     }

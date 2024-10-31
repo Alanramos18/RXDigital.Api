@@ -37,6 +37,8 @@ namespace RXDigital.Api.Context
             builder.Entity<GetPrescriptionsProc>().Property(t => t.Concentration)
                 .HasColumnName("concentracion");
 
+            
+
             base.OnModelCreating(builder);
             //SeedRoles(builder);
 

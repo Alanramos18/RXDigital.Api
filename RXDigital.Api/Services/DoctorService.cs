@@ -70,13 +70,29 @@ namespace RXDigital.Api.Services
 
 
         /// <inheritdoc />
-        public async Task<int> CreatePrescriptionAsync(CreatePrescriptionRequestDto requestDto, CancellationToken cancellationToken)
+        public async Task<string> CreatePrescriptionAsync(CreatePrescriptionRequestDto requestDto, CancellationToken cancellationToken)
         {
             try
             {
+                var lastPrescription = 
+                    await _prescriptionRepository
+                        .Get()
+                        .OrderByDescending(x => x.PrescriptionCode)
+                        .FirstOrDefaultAsync(cancellationToken);
+
+                string newCode;
+
+                if (lastPrescription == null)
+                {
+                    newCode = "AA-000";
+                } else
+                {
+                    newCode = GetNextCode(lastPrescription.PrescriptionCode);
+                }
+
                 var prescription = new Prescription
                 {
-                    PrescriptionId = 12,
+                    PrescriptionCode = newCode,
                     RegistrationId = requestDto.DoctorRegistration,
                     PatientId = requestDto.PatientId,
                     MedicineId = requestDto.MedicineId,
@@ -90,7 +106,7 @@ namespace RXDigital.Api.Services
                 await _prescriptionRepository.AddAsync(prescription, cancellationToken);
                 await _prescriptionRepository.SaveChangesAsync(cancellationToken);
 
-                return prescription.PrescriptionId;
+                return prescription.PrescriptionCode;
             }
             catch (Exception ex)
             {
@@ -109,6 +125,54 @@ namespace RXDigital.Api.Services
 
             _prescriptionRepository.Delete(prescription);
             await _prescriptionRepository.SaveChangesAsync(cancellationToken);
+        }
+
+        public string GetNextCode(string code)
+        {
+            if (string.IsNullOrEmpty(code))
+                return "AA-000";
+
+            // Separar el código en letras y número
+            string letters = code.Substring(0, 2);
+            int number = int.Parse(code.Substring(3));
+
+            // Incrementar el número
+            number++;
+
+            if (number > 999) // Si el número supera el límite, reiniciamos a 000 y aumentamos las letras
+            {
+                number = 0;
+                letters = IncrementLetters(letters);
+            }
+
+            // Formatear el código de nuevo en el formato "AA-000"
+            return $"{letters}-{number:D3}";
+        }
+
+        private string IncrementLetters(string letters)
+        {
+            char firstLetter = letters[0];
+            char secondLetter = letters[1];
+
+            if (secondLetter < 'Z') // Incrementar la segunda letra
+            {
+                secondLetter++;
+            }
+            else // Si la segunda letra es 'Z', reiniciar a 'A' y subir la primera letra
+            {
+                secondLetter = 'A';
+
+                if (firstLetter < 'Z')
+                {
+                    firstLetter++;
+                }
+                else // Si las letras alcanzan "ZZ", se ha llegado al máximo
+                {
+                    throw new InvalidOperationException("Se ha alcanzado el código máximo: ZZ-999.");
+                }
+            }
+
+            return $"{firstLetter}{secondLetter}";
         }
     }
 }

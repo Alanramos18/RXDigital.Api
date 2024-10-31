@@ -2,7 +2,7 @@
 {
     public class Prescription
     {
-        public int PrescriptionId { get; set; }
+        public string? PrescriptionCode { get; set; }
         public string? Diagnostic { get; set; }
         public string? Indications { get; set; }
         public DateTime CreatedDate { get; set; }
@@ -21,6 +21,6 @@
         public Status Status { get; set; }
 
         public int? PharmaceuticalRegistrationId { get; set; }
-        public Pharmaceutical? Pharmaceutical { get; set; }
+        public Pharmaceutical? Pharmaceutical { get; set; }        
     }
 }
