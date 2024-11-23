@@ -22,6 +22,10 @@ namespace RXDigital.Api.Entities.Mappings
                 .HasColumnName("apellido")
                 .IsRequired();
 
+            builder.Property(t => t.Dni)
+    .HasColumnName("dni")
+    .IsRequired();
+
             builder.Property(t => t.Email)
                 .HasColumnName("email")
                 .IsRequired();
@@ -32,6 +36,9 @@ namespace RXDigital.Api.Entities.Mappings
 
             builder.Property(t => t.RoleId)
                 .HasColumnName("id_rol");
+
+            builder.Property(t => t.Estado)
+                .HasColumnName("estado");
 
             builder.HasOne(t => t.Role)
                 .WithMany(t => t.Accounts)

@@ -49,8 +49,9 @@ namespace RXDigital.Api.Services
 
                         var newDoctor = new Doctor
                         {
-                            RegistrationId = accountDto.Registration,
-                            UserId = account.Id
+                            RegistrationId = (Int32)accountDto.Registration,
+                            UserId = account.Id,
+                            EspecialidadId = (Int32)accountDto.EspecialidadId
                         };
 
                         await _doctorRepository.AddAsync(newDoctor, cancellationToken);
@@ -62,7 +63,7 @@ namespace RXDigital.Api.Services
 
                         var newPharmaceutic = new Pharmaceutical
                         {
-                            RegistrationId = accountDto.Registration,
+                            RegistrationId = (Int32)accountDto.Registration,
                             AccountId = account.Id
                         };
 
@@ -97,7 +98,19 @@ namespace RXDigital.Api.Services
             if (user == null || !await _accountRepository.CheckPasswordAsync(user, loginDto.Password))
             {
                 _logger.LogInformation($"The email: {loginDto.Email} has try to log in with password: {loginDto.Password}");
-                throw new Exception("Email or password is invalid");
+                throw new Exception("El usuario o la contraseña son invalidas. Por favor intente de nuevo.");
+            }
+
+            switch (user.Estado)
+            {
+                case 0:
+                    throw new Exception("El usuario esta pendiente de aprobación.");
+                    break;
+                case 2:
+                    throw new Exception("El usuario esta rechazado. Pruebe registrandose de nuevo!");
+                    break;
+                default:
+                    break;
             }
 
             // We need to update claims in the future.
@@ -120,7 +133,7 @@ namespace RXDigital.Api.Services
                 issuer: _jwtSettings.ValidIssuer,
                 audience: _jwtSettings.ValidAudience,
                 claims: claims,
-                expires: DateTime.Now.AddDays(1),
+                expires: DateTime.UtcNow.AddDays(1),
                 signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256));
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);

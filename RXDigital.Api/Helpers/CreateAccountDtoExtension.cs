@@ -15,9 +15,12 @@ namespace RXDigital.Api.Helpers
                 Email = dto.Email,
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
+                Dni = dto.Dni,
                 RoleId = (int)dto.RoleId,
                 UserName = dto.FirstName + dto.LastName,
-                SecurityStamp = Guid.NewGuid().ToString()
+                SecurityStamp = Guid.NewGuid().ToString(),
+                // 0 - Pendiente, 1 - Aceptado, 2 - Rechazado
+                Estado = 0
             };
 
             return account;

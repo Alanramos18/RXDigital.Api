@@ -29,6 +29,8 @@
         /// <param name="cancellationToken">Cancellation Transaction Token</param>
         Task AddAsync(IEnumerable<T> entities, CancellationToken cancellationToken);
 
+        void Update(T entity);
+
         /// <summary>
         ///     Deletes the specified entity.
         /// </summary>

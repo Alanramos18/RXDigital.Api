@@ -76,6 +76,25 @@ namespace RXDigital.Api.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("{patientId}")]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(int))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdatePatientAsync(int patientId, PatientResquestDto patientResquestDto, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                await _patientService.UpdatePatientAsync(patientId, patientResquestDto, cancellationToken);
+
+                return new OkResult();
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(ex.Message);
+            }
+        }
+
+
         [HttpGet]
         [Route("getSocialWorks")]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(List<SocialWorksInfoResponseDto>))]
@@ -125,6 +144,24 @@ namespace RXDigital.Api.Controllers
                 }
 
                 return new OkObjectResult(response);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(ex.Message);
+            }
+        }
+
+        [HttpDelete]
+        [Route("{patientId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeletePatientAsync(int patientId, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                await _patientService.DeletePatientAsync(patientId, cancellationToken);
+
+                return new OkResult();
             }
             catch (Exception ex)
             {

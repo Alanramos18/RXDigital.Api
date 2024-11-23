@@ -8,65 +8,67 @@ namespace RXDigital.Api.Entities.Mappings
         public void Configure(EntityTypeBuilder<Patient> builder)
         {
             builder.ToTable("paciente", "admin");
-            builder.HasKey(t => t.PatientId);
+            builder.HasKey(t => t.Dni);
 
-            builder.Property(t => t.PatientId)
+            builder.Property(t => t.Dni)
                 .HasColumnName("dni")
                 .IsRequired();
 
-            builder.Property(t => t.FirstName)
+            builder.Property(t => t.Nombre)
                 .HasColumnName("nombre")
                 .IsRequired();
 
-            builder.Property(t => t.LastName)
+            builder.Property(t => t.Apellido)
                 .HasColumnName("apellido")
                 .IsRequired();
 
-            builder.Property(t => t.BirthDay)
+            builder.Property(t => t.FechaNacimiento)
                 .HasColumnName("fecha_nacimiento")
                 .IsRequired();
 
-            builder.Property(t => t.InscriptionDate)
+            builder.Property(t => t.FechaInscripcion)
                 .HasColumnName("fecha_inscripcion")
                 .IsRequired();
 
-            builder.Property(t => t.SocialNumber)
-                .HasColumnName("numero_afiliado")
-                .IsRequired();
+            builder.Property(t => t.NumeroAfiliado)
+                .HasColumnName("numero_afiliado");
 
             builder.Property(t => t.SocialWorkId)
                 .HasColumnName("id_obra_social");
 
-            builder.Property(t => t.Gender)
+            builder.Property(t => t.Genero)
                 .HasColumnName("sexo");
 
-            builder.Property(t => t.Cellphone)
+            builder.Property(t => t.Celular)
                 .HasColumnName("celular");
 
-            builder.Property(t => t.HomePhone)
+            builder.Property(t => t.Telefono)
                 .HasColumnName("telefono_fijo");
 
-            builder.Property(t => t.IsAvailable)
+            builder.Property(t => t.Habilitado)
                 .HasColumnName("habilitado");
 
-            builder.Property(t => t.AddressStreet)
-                .HasColumnName("calle");
+            builder.Property(t => t.Domicilio)
+                .HasColumnName("domicilio");
 
-            builder.Property(t => t.AddressNumber)
-                .HasColumnName("numero");
+            builder.Property(t => t.Localidad)
+                .HasColumnName("localidad");
 
-            builder.Property(t => t.LocationId)
-                .HasColumnName("id_localidad");
+            builder.Property(t => t.Nacionalidad)
+                .HasColumnName("nacionalidad");
+
+            builder.Property(t => t.Provincia)
+                .HasColumnName("provincia");
+
 
             builder.HasOne(t => t.SocialWork)
                 .WithMany(t => t.Patients)
                 .HasForeignKey(t => t.SocialWorkId)
                 .IsRequired();
 
-            builder.HasOne(t => t.Location)
-                .WithMany(t => t.Patients)
-                .HasForeignKey(t => t.LocationId)
-                .IsRequired();
+            builder.HasMany(p => p.Prescriptions)
+                .WithOne(t => t.Patient)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

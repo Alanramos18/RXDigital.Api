@@ -22,10 +22,13 @@ namespace RXDigital.Api.Repositories
 
     public class GetPrescriptionsProc
     {
-        public int PrescriptionId { get; set; }
+        public string CodigoReceta { get; set; }
+        public DateTime FechaEmision { get; set; }
         public DateTime ExpirationDate { get; set; }
         public string? Diagnostic { get; set; }
         public string? MedicineName { get; set; }
-        public int Concentration { get; set; }
+        public string Concentration { get; set; }
+        public string? Comentario { get; set; }
+        public string? Estado { get; set; }
     }
 }

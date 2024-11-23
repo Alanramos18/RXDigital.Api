@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using RXDigital.Api.Entities;
 using RXDigital.Api.Repositories;
 
@@ -7,7 +8,7 @@ namespace RXDigital.Api.Context
     public interface IRxDigitalContext
     {
         DbSet<TEntity> Set<TEntity>() where TEntity : class;
-
+        DatabaseFacade Database { get; }
         /// <summary>
         ///     Accounts entities.
         /// </summary>

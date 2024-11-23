@@ -12,21 +12,23 @@ namespace RXDigital.Api.Helpers
 
             var patientInfo = new PatientInfoResponseDto
             {
-                PatientId = entity.PatientId,
-                FirstName = entity.FirstName,
-                LastName = entity.LastName,
-                BirthDay = entity.BirthDay,
-                InscriptionDate = entity.InscriptionDate,
-                SocialNumber = entity.SocialNumber,
-                Gender = entity.Gender,
-                Cellphone = entity.Cellphone,
-                HomePhone = entity.HomePhone,
-                SocialWorkName = entity.SocialWork.Name,
-                SocialPlan = entity.SocialWork.SocialPlan,
-                Address = $"{entity.AddressStreet} {entity.AddressNumber}",
+                Dni = entity.Dni,
+                Nombre = entity.Nombre,
+                Apellido = entity.Apellido,
+                FechaNacimiento = entity.FechaNacimiento,
+                FechaInscripcion = entity.FechaInscripcion,
+                NumeroAfiliado = entity.NumeroAfiliado,
+                Genero = entity.Genero,
+                Celular = entity.Celular,
+                Telefono = entity.Telefono,
+                ObraSocial = entity.SocialWork.Name,
+                PlanSocial = entity.SocialWork.SocialPlan,
+                Domicilio = entity.Domicilio,
                 Email = entity.Email,
-                Nationality = entity.Location.Country,
-                IsAvailable = entity.IsAvailable
+                Nacionalidad = entity.Nacionalidad,
+                Habilitacion = entity.Habilitado,
+                Localidad = entity.Localidad,
+                Provincia = entity.Provincia
             };
 
             return patientInfo;

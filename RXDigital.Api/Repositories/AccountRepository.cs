@@ -62,5 +62,79 @@ namespace RXDigital.Api.Repositories
                 throw e;
             }
         }
+
+        public async Task Update(AccountEntity user, CancellationToken cancellationToken)
+        {
+            try
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                ThrowIfDisposed();
+
+                _store.Context.Set<AccountEntity>().Update(user);
+                await _store.Context.SaveChangesAsync(cancellationToken);
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
+
+        public async Task Delete(AccountEntity user, CancellationToken cancellationToken)
+        {
+            try
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                ThrowIfDisposed();
+
+                _store.Context.Set<AccountEntity>().Remove(user);
+                await _store.Context.SaveChangesAsync(cancellationToken);
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
+
+        public async Task<AccountEntity> GetAsync(string userId, CancellationToken cancellationToken)
+        {
+            try
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                ThrowIfDisposed();
+
+                var user = await _store.Context.Set<AccountEntity>().Where(x => x.Id.Equals(userId)).FirstOrDefaultAsync(cancellationToken);
+
+                return user;
+
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
+
+        public async Task<List<AccountEntity>> GetAllAsync(CancellationToken cancellationToken)
+        {
+            try
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                ThrowIfDisposed();
+
+                var user = await _store.Context.Set<AccountEntity>()
+                    .Include(x => x.Doctor)
+                    .Include(x => x.Pharmaceutical)
+                    .Where(x => x.Estado == 0).ToListAsync(cancellationToken);
+
+                return user;
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
     }
 }

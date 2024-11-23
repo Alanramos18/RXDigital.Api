@@ -27,10 +27,6 @@ namespace RXDigital.Api.Entities.Mappings
                 .HasColumnName("expiracion")
                 .IsRequired();
 
-            builder.Property(t => t.MedicineId)
-                .HasColumnName("id_medicamento")
-                .IsRequired();
-
             builder.Property(t => t.PatientId)
                 .HasColumnName("dni_paciente")
                 .IsRequired();
@@ -39,16 +35,14 @@ namespace RXDigital.Api.Entities.Mappings
                 .HasColumnName("matricula")
                 .IsRequired();
 
+            builder.Property(t => t.MotivoRechazo)
+                .HasColumnName("motivo_rechazo");
+
             builder.Property(t => t.PharmaceuticalRegistrationId)
                 .HasColumnName("matricula_farmaceutico");
 
             builder.Property(t => t.StatusId)
                 .HasColumnName("id_estado")
-                .IsRequired();
-
-            builder.HasOne(t => t.Medicine)
-                .WithMany(t => t.Prescriptions)
-                .HasForeignKey(t => t.MedicineId)
                 .IsRequired();
 
             builder.HasOne(t => t.Patient)
@@ -69,6 +63,10 @@ namespace RXDigital.Api.Entities.Mappings
                 .WithMany(t => t.Prescriptions)
                 .HasForeignKey(t => t.StatusId)
                 .IsRequired();
+
+            builder.HasMany(p => p.PrescriptionMedicines)
+                .WithOne(t => t.Prescription)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

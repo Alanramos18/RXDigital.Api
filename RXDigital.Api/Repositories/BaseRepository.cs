@@ -40,6 +40,11 @@ namespace RXDigital.Api.Repositories
             await _context.Set<T>().AddRangeAsync(entities, cancellationToken);
         }
 
+        public virtual void Update(T entity)
+        {
+            _context.Set<T>().Update(entity);
+        }
+
         /// <inheritdoc />
         public virtual void Delete(T entity)
         {

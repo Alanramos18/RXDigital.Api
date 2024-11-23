@@ -1,5 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Threading;
 using Microsoft.EntityFrameworkCore;
 using RXDigital.Api.DTOs;
 using RXDigital.Api.Entities;
@@ -14,14 +15,12 @@ namespace RXDigital.Api.Services
     {
         private readonly IPatientRepository _patientRepository;
         private readonly ISocialWorkRepository _socialWorkRepository;
-        private readonly ILocationRepository _locationRepository;
         private readonly ILogger<AccountService> _logger;
 
-        public PatientService(IPatientRepository patientRepository, ISocialWorkRepository socialWorkRepository, ILocationRepository locationRepository, ILogger<AccountService> logger)
+        public PatientService(IPatientRepository patientRepository, ISocialWorkRepository socialWorkRepository, ILogger<AccountService> logger)
         {
             _patientRepository = patientRepository;
             _socialWorkRepository = socialWorkRepository;
-            _locationRepository = locationRepository;
             _logger = logger;
         }
 
@@ -33,8 +32,7 @@ namespace RXDigital.Api.Services
                 var patient = await _patientRepository
                     .Get()
                     .Include(x => x.SocialWork)
-                    .Include(x => x.Location)
-                    .FirstOrDefaultAsync(x => x.PatientId == patientId, cancellationToken);
+                    .FirstOrDefaultAsync(x => x.Dni == patientId, cancellationToken);
 
                 var patientInfo = patient.Convert();
 
@@ -47,40 +45,72 @@ namespace RXDigital.Api.Services
             }
 
         }
+        public async Task UpdatePatientAsync(int patientId, PatientResquestDto patientResquestDto, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var patient = await _patientRepository.GetByIdAsync(patientId, cancellationToken);
+                patient.Dni = patientResquestDto.Dni;
+                patient.Nombre = patientResquestDto.Nombre;
+                patient.Apellido = patientResquestDto.Apellido;
+                patient.FechaNacimiento = patientResquestDto.FechaNacimiento;
+                patient.FechaInscripcion = DateTime.UtcNow;
+                patient.Genero = patientResquestDto.Genero;
+                patient.Celular = patientResquestDto.Celular;
+                patient.Telefono = patientResquestDto.Telefono;
+                patient.Email = patientResquestDto.Email;
+                patient.SocialWorkId = patientResquestDto.ObraSocialId;
+                patient.NumeroAfiliado = patientResquestDto.NumeroAfiliado;
+                patient.Habilitado = true;
+                patient.Domicilio = patientResquestDto.Direccion;
+                patient.Localidad = patientResquestDto.Localidad;
+                patient.Provincia = patientResquestDto.Provincia;
+                patient.Nacionalidad = patientResquestDto.Nacionalidad;
+
+                _patientRepository.Update(patient);
+                await _patientRepository.SaveChangesAsync(cancellationToken);
+
+                return;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
 
         public async Task<int> CreatePatientAsync(PatientResquestDto patientResquestDto, CancellationToken cancellationToken)
         {
-            var location = new Location
+            try
             {
-                Name = patientResquestDto.Location,
-                Province = patientResquestDto.Province,
-                Country = patientResquestDto.Country
-            };
+                var patient = new Patient
+                {
+                    Dni = patientResquestDto.Dni,
+                    Nombre = patientResquestDto.Nombre,
+                    Apellido = patientResquestDto.Apellido,
+                    FechaNacimiento = patientResquestDto.FechaNacimiento,
+                    FechaInscripcion = DateTime.UtcNow,
+                    Genero = patientResquestDto.Genero,
+                    Celular = patientResquestDto.Celular,
+                    Telefono = patientResquestDto.Telefono,
+                    Email = patientResquestDto.Email,
+                    SocialWorkId = patientResquestDto.ObraSocialId,
+                    NumeroAfiliado = patientResquestDto.NumeroAfiliado,
+                    Habilitado = true,
+                    Domicilio = patientResquestDto.Direccion,
+                    Localidad = patientResquestDto.Localidad,
+                    Provincia = patientResquestDto.Provincia,
+                    Nacionalidad = patientResquestDto.Nacionalidad
+                };
 
-            await _locationRepository.AddAsync(location, cancellationToken);
+                await _patientRepository.AddAsync(patient, cancellationToken);
+                await _patientRepository.SaveChangesAsync(cancellationToken);
 
-            var patient = new Patient
+                return patient.Dni;
+            }
+            catch (Exception e)
             {
-                PatientId = patientResquestDto.Id,
-                FirstName = patientResquestDto.FirstName,
-                LastName = patientResquestDto.LastName,
-                BirthDay = patientResquestDto.BirthDay,
-                Gender = patientResquestDto.Gender,
-                Cellphone = patientResquestDto.Cellphone,
-                HomePhone = patientResquestDto.HomePhone,
-                Email = patientResquestDto.Email,
-                SocialWorkId = patientResquestDto.SocialWorkId,
-                SocialNumber = patientResquestDto.SocialNumber,
-                IsAvailable = true,
-                AddressStreet = patientResquestDto.AddressStreet,
-                AddressNumber = patientResquestDto.AddressNumber,
-                LocationId = location.LocationId
-            };
-
-            await _patientRepository.AddAsync(patient, cancellationToken);
-            await _patientRepository.SaveChangesAsync(cancellationToken);
-
-            return patient.PatientId;
+                throw e;
+            }
         }
 
         public async Task<List<SocialWorksInfoResponseDto>> GetSocialWorksAsync(CancellationToken cancellationToken)
@@ -109,6 +139,29 @@ namespace RXDigital.Api.Services
             var prescriptions = await _patientRepository.GetPrescriptionsAsync(patientId);
 
             return prescriptions;
+        }
+
+        public async Task DeletePatientAsync(int patientId, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var patient = await _patientRepository.GetByIdAsync(patientId, cancellationToken);
+
+                if (patient == null)
+                {
+                    return;
+                }
+
+                // NO borramos, solo deshabilitamos
+                //_patientRepository.Delete(patient);
+                patient.Habilitado = !patient.Habilitado;
+                _patientRepository.Update(patient);
+                await _patientRepository.SaveChangesAsync(cancellationToken);
+            }
+            catch (Exception ex) 
+            {
+                throw ex;
+            }
         }
     }
 }

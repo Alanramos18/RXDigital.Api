@@ -1,12 +1,14 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RXDigital.Api.DTOs;
+using RXDigital.Api.Entities;
 using RXDigital.Api.Repositories;
 using RXDigital.Api.Services.Interfaces;
 
 namespace RXDigital.Api.Controllers
 {
     [ApiController]
+    //[Authorize(Policy = "MedicPolicy")]
     [AllowAnonymous]
     [Route("[controller]")]
     public class DoctorController : ControllerBase
@@ -84,15 +86,15 @@ namespace RXDigital.Api.Controllers
             }
         }
 
-        [HttpDelete]
-        [Route("delete-prescription")]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(PatientInfoResponseDto))]
+        [HttpPut]
+        [Route("update-prescription/{rxCode}")]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> DeletePrescriptionAsync(int rxId, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> UpdatePrescriptionAsync(string rxCode, CreatePrescriptionRequestDto requestDto, CancellationToken cancellationToken = default)
         {
             try
             {
-                await _doctorService.DeletePrescriptionAsync(rxId, cancellationToken);
+                await _doctorService.UpdatePrescriptionAsync(rxCode, requestDto, cancellationToken);
 
                 return new OkResult();
             }
@@ -101,12 +103,46 @@ namespace RXDigital.Api.Controllers
                 return new BadRequestObjectResult(ex.Message);
             }
         }
-    }
 
-    public enum Channels
-    {
-        None = 0,
-        Whatsapp = 1,
-        Email = 2
+        [HttpGet]
+        [Route("get-prescription/{prescriptionCode}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Prescription))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetPrescriptionAsync(string prescriptionCode, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var res = await _doctorService.GetPrescriptionAsync(prescriptionCode, cancellationToken);
+
+                if (res == null)
+                {
+                    return new NotFoundResult();
+                }
+
+                return new OkObjectResult(res);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(ex.Message);
+            }
+        }
+
+        [HttpDelete]
+        [Route("delete-prescription/{prescriptionCode}")]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(PatientInfoResponseDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeletePrescriptionAsync(string prescriptionCode, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                await _doctorService.DeletePrescriptionAsync(prescriptionCode, cancellationToken);
+
+                return new OkResult();
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestObjectResult(ex.Message);
+            }
+        }
     }
 }

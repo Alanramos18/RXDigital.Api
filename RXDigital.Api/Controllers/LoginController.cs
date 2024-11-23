@@ -30,7 +30,7 @@ namespace RXDigital.Api.Controllers
         /// <response code="400">Bad Request.</response>
         [HttpPost]
         [Route("register")]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(RegisterResponseDto))]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> RegisterAsync(RegisterRequestDto createAccountDto, CancellationToken cancellationToken = default)
         {
@@ -41,10 +41,10 @@ namespace RXDigital.Api.Controllers
                 if (response == null)
                 {
 
-                    return new BadRequestObjectResult("That email is already registered.");
+                    return new BadRequestObjectResult("El email ya fue registrado previamente.");
                 }
 
-                return new CreatedAtRouteResult("RegisterAsync", response);
+                return Created("RegisterAsync", null);
             }
             catch (Exception ex)
             {

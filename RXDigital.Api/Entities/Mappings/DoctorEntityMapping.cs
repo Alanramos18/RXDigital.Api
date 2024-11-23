@@ -17,9 +17,17 @@ namespace RXDigital.Api.Entities.Mappings
             builder.Property(t => t.UserId)
                 .HasColumnName("id_usuario");
 
+            builder.Property(t => t.EspecialidadId)
+                .HasColumnName("id_especialidad");
+
             builder.HasOne(t => t.User)
                 .WithOne(t => t.Doctor)
                 .HasForeignKey<Doctor>(t => t.UserId)
+                .IsRequired();
+
+            builder.HasOne(t => t.Especialidad)
+                .WithOne(t => t.Doctor)
+                .HasForeignKey<Doctor>(t => t.EspecialidadId)
                 .IsRequired();
         }
     }

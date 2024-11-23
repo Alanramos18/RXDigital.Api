@@ -14,6 +14,9 @@ namespace RXDigital.Api.Entities.Mappings
                 .HasColumnName("matricula")
                 .IsRequired();
 
+            builder.Property(t => t.AccountId)
+                .HasColumnName("id_usuario");
+
             builder.HasOne(t => t.Account)
                 .WithOne(t => t.Pharmaceutical)
                 .HasForeignKey<Pharmaceutical>(t => t.AccountId)

@@ -1,8 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Threading.Channels;
 using RXDigital.Api.Controllers;
-using RXDigital.Api.Entities;
-using RXDigital.Api.Services;
 
 namespace RXDigital.Api.DTOs
 {
@@ -15,15 +12,20 @@ namespace RXDigital.Api.DTOs
         public int PatientId { get; set; }
 
         [Required]
-        public int MedicineId { get; set; }
+        public List<MedicinesDto> Medicines { get; set; }
 
         [Required]
         public string Diagnostic { get; set; }
 
+        public string? Indications { get; set; }
+    }
+
+    public class MedicinesDto
+    {
         [Required]
-        public string Indications { get; set; }
+        public int MedicineId { get; set; }
 
         [Required]
-        public Channels Channels { get; set; }
+        public string Indications { get; set; }
     }
 }

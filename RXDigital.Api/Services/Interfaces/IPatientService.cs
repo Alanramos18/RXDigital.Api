@@ -16,6 +16,8 @@ namespace RXDigital.Api.Services.Interfaces
         
         Task<List<GetPrescriptionsProc>> GetPrescriptionsAsync(int patientId, CancellationToken cancellationToken);
         Task<int> CreatePatientAsync(PatientResquestDto patientResquestDto, CancellationToken cancellationToken);
+        Task UpdatePatientAsync(int patientId, PatientResquestDto patientResquestDto, CancellationToken cancellationToken);
         Task<List<SocialWorksInfoResponseDto>> GetSocialWorksAsync(CancellationToken cancellationToken);
+        Task DeletePatientAsync(int patientId, CancellationToken cancellationToken);
     }
 }

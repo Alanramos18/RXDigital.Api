@@ -23,5 +23,9 @@ namespace RXDigital.Api.Repositories.Interfaces
         Task<AccountEntity> FindByEmailAsync(string email, CancellationToken cancellationToken);
 
         Task<bool> CheckPasswordAsync(AccountEntity user, string password);
+        Task<List<AccountEntity>> GetAllAsync(CancellationToken cancellationToken);
+        Task<AccountEntity> GetAsync(string userId, CancellationToken cancellationToken);
+        Task Update(AccountEntity user, CancellationToken cancellationToken);
+        Task Delete(AccountEntity user, CancellationToken cancellationToken);
     }
 }

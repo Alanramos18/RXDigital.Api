@@ -3,8 +3,9 @@
     public class MedicineInfoResponseDto
     {
         public int MedicineId { get; set; }
-        public string CommercialName { get; set; }
-        public string Presentation { get; set; }
-        public int Concentration { get; set; }
+        public string NombreComercial { get; set; }
+        public string Presentacion { get; set; }
+        public string Concentracion { get; set; }
+        public string Descripcion { get; set; }
     }
 }

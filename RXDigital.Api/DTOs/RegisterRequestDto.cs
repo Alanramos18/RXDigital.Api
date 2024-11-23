@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using RXDigital.Api.Entities;
 using RXDigital.Api.Services;
 
 namespace RXDigital.Api.DTOs
@@ -13,6 +12,9 @@ namespace RXDigital.Api.DTOs
         public string? Password { get; set; }
 
         [Required]
+        public int Dni { get; set; }
+
+        [Required]
         public string FirstName { get; set; }
 
         [Required]
@@ -21,6 +23,7 @@ namespace RXDigital.Api.DTOs
         [Required]
         public RoleEnum RoleId { get; set; }
 
-        public int Registration { get; set; }
+        public int? Registration { get; set; }
+        public int? EspecialidadId { get; set; }
     }
 }
